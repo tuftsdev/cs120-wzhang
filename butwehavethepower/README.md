@@ -1,0 +1,1 @@
+This is repo for lab6 which is our first Javascript project. It took me 30 minutes to finish.
