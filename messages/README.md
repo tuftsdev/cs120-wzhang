@@ -1,0 +1,1 @@
+This lab focus on parsing JSON file using javascript. It took me 1 hour to reasearch and finish the lab.
