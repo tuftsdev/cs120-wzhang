@@ -10,6 +10,9 @@ function myMap() {
   };
   var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
+  
+
+
 /*   var firstLat = new google.maps.LatLng(42.3453,	-71.0464);
   var secLAt   = new google.maps.LatLng(42.3662,	-71.0621);
   var thirdLat = new google.maps.LatLng(42.3603,	-71.0547);
@@ -70,30 +73,34 @@ function myMap() {
      longitude = position.coords.longitude;
      var myLocation = new google.maps.Marker({});
      var myLatLng = new google.maps.LatLng(latitude,	longitude);
+     var minLocation = new google.maps.LatLng(latitude,	longitude);;
      myLocation.setPosition(myLatLng);
      myLocation.setMap(map);
+     var  distance = BigInt(9007199254740991);
      console.log(latitude,longitude);
 
      var xhttp = new XMLHttpRequest();
-     var url = 'https://jordan-marsh.herokuapp.com/rides';
+     var url = 'https://gentle-atoll-32585.herokuapp.com/rides';
      var params = "username=DaPLuvLU&lat=" + latitude + "&lng=" + longitude;
-     console.log(params);
      xhttp.open('POST', url, true);
     
     //Send the proper header information along with the request
     xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    console.log(params);
     
     xhttp.onreadystatechange = function() {//Call a function when the state changes.
       if(xhttp.readyState == 4 && xhttp.status == 200) {
+        console.log("request successful");
           var cars =  JSON.parse(xhttp.responseText);
+          console.log("request successful");
           console.log(cars);
 
           
 
           for (let i = 0; i < cars.length; i++) {
             var secLAt = new google.maps.LatLng(cars[i].lat, cars[i].lng);
-            var minLocation ;
-            //console.log(secLAt.lat(), secLAt.lng());
+            //var minLocation = BigInt(9007199254740991);
+            console.log(secLAt.lat(), secLAt.lng());
             marker = new google.maps.Marker({
               position: new google.maps.LatLng(secLAt),
               map: map,
@@ -108,7 +115,7 @@ function myMap() {
           }
           
           
-      }
+      };
       const infowindow = new google.maps.InfoWindow({
         content: "Closest Vehich is " + distance + " miles away at " + minLocation.lat() + ", " + minLocation.lng(),
         ariaLabel: "Uluru",
@@ -135,9 +142,11 @@ function myMap() {
 
 
     }
-    xhttp.send(params);
+    xhttp.send();
     
  }
+ 
+ 
 
 
 
