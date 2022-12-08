@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Security</title>
+</head>
+<body>
+
+    <div>
+        <h1>Introduction</h1>
+        <p>I have been hired as a security consultant to document and 
+            resolve the security and privacy issues of a ride-hailing service.
+            This includes finding any potential security issues that exist within the
+            ride-hailing service.</p>
+
+        <h1>Methodology</h1>
+        <p>Methodology used in this lab includes 
+            <li>Review the source code of the project. </li> 
+            <li>Using Burp Suite to check any potential security issues with the project.</li>
+            <li>Using sample user input to test potential sql injection.</li>
+        </p>
+
+        <h1>Abstract of Findings</h1>
+        <p>There are several places that user can input some SQL languages
+            to either dump garbage data to the database or pull unexpected data that is
+            not suppose to be avaliable to the users. Also, hackers can use other tools to 
+            send dummy request to attack the server.
+        </p>
+
+        <h1>Issues Found</h1>
+        <p>
+            <li>Insert data sql injection</li>
+                <ul>
+                    <li>Issue: User can modify their lng value to duump garbage data into the database</li>
+                    <li>Location: Line 53 in server-vuln.js</li>
+                    <li>Severity of issue: High</li>
+                    <li>Description of issue: User can use other tools to modify their request data sent to the server especially
+                        the value of lng which may have another insert into statment to dump garbage data into the database.
+                    </li>
+                    <li>Proof of vulnerability: If the value of lng is something like 455.214)'; Insert into vehicles(username, lat, lng) VALUES (...)  
+                        where ... can be lot of garbage data. This would occupy a big amount of memory of the database.
+                    </li>
+                    <li>Resolution: we should implement some validation before insert any data into the database.
+                        For example: is there any single quote in the input? any SQL key words used?
+                    </li>
+                </ul>
+        </p>
+
+        <p>
+            <li>SQL select statement database injection</li>
+                <ul>
+                    <li>Issue: When the username is in certain format then all the data 
+                        from both passenger and vehicle table will be pulled.</li>
+                    <li>Location: Line 72 and 87 in server-vuln.js</li>
+                    <li>Severity of issue: High</li>
+                    <li>Description of issue: When the input username from user combines some specific conditions that overwrites
+                        the first condition in the select statment, then all the data from the database could be pulled and show to
+                        the user which is a terrible situation with data leaks.
+                    </li>
+                    <li>Proof of vulnerability: If the value of the user name is something like "JANET"' or 1=1'. Then the second 
+                        condition overwrites the previous match statement and all the data in the table will be qulified to be shown 
+                        to the user.
+                    </li>
+                    <li>Resolution: we should implement some validation before insert any data into the database.
+                        For example: is there any single quote in the input? any SQL key words used?
+                    </li>
+                </ul>
+        </p>
+
+        <p>
+            <li>Hard coded vehicle name</li>
+                <ul>
+                    <li>Issue: Vehicle name is hard coded in the source code without any encryption.</li>
+                    <li>Location: Line 45 in server-vuln.js</li>
+                    <li>Severity of issue: medium</li>
+                    <li>Description of issue: All the vehicle name data is hardcoded and shown in the source code
+                        code without any encryption which is not a good practice.
+                    </li>
+                    <li>Proof of vulnerability: We may have new vehicle names or want to update some vehicle names that will 
+                        become very manual work.
+                    </li>
+                    <li>Resolution: store the vehicle names in a separate file and encryted without direct access to the other users.
+
+                    </li>
+                </ul>
+        </p>
+
+        <h1>Conclusion</h1>
+        <p>Sql injection is a big problem and may consider a consisten solution to aviod using simple insert or 
+            select statment without any validation of the input. And try to avoid any hard coded information like 
+            vehicle name, conneciton configuration data etc, try to put them in separate files and use third party 
+            software like jenkins to populate those parameters safely.
+        </p>
+
+    </div>
+
+
+
+
+</body>
+</html>
